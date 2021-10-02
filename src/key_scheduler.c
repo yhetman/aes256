@@ -6,12 +6,11 @@
 /*   By: yhetman <yhetman@student.unit.ua>                                    */
 /*                                                                            */
 /*   Created: 2021/10/02 14:12:29 by yhetman                                  */
-/*   Updated: 2021/10/02 14:12:30 by yhetman                                  */
+/*   Updated: 2021/10/03 00:02:09 by blukasho                                 */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "aes.h"
-
 
 void		sub_word(uint8_t *w)
 {

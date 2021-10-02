@@ -6,13 +6,11 @@
 /*   By: yhetman <yhetman@student.unit.ua>                                    */
 /*                                                                            */
 /*   Created: 2021/09/24 15:35:50 by yhetman                                  */
-/*   Updated: 2021/09/24 15:35:54 by yhetman                                  */
+/*   Updated: 2021/10/03 00:15:07 by blukasho                                 */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "aes.h"
-
-
 
 uint8_t		*allocate_w(t_aes *aes)
 {
@@ -39,7 +37,7 @@ uint8_t		*allocate_w(t_aes *aes)
 	return (w);
 }
 
-void	init_t_aes(t_aes *aes, uint8_t *key, uint8_t *input)
+static void	init_t_aes(t_aes *aes, uint8_t *key, uint8_t *input)
 {
 	//t_aes 	data;
 
@@ -52,11 +50,10 @@ void	init_t_aes(t_aes *aes, uint8_t *key, uint8_t *input)
 	init_key_scheduler(aes);
 }
 
-
 int 	main()
 {
 	t_aes 	aes;
-	uint8_t	i;
+//	uint8_t	i;
 
 	uint8_t initial_key[] = {
 		0x00, 0x01, 0x02, 0x03,
@@ -80,7 +77,7 @@ int 	main()
 
 	init_t_aes(&aes, initial_key, input);
 
-	cipher(&aes);
+//	cipher(&aes);
 //	init_t_aes(initial_key, key_schedule);
 
 

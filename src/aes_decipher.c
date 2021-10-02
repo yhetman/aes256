@@ -6,10 +6,9 @@
 /*   By: yhetman <yhetman@student.unit.ua>                                    */
 /*                                                                            */
 /*   Created: 2021/10/02 13:51:29 by yhetman                                  */
-/*   Updated: 2021/10/02 13:51:31 by yhetman                                  */
+/*   Updated: 2021/10/02 23:16:40 by blukasho                                 */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "aes.h"
 
