@@ -12,11 +12,12 @@
 
 #include "aes.h"
 
-int main() {
-
+int 	main()
+{
+	t_aes 	*aes;
 	uint8_t	i;
 
-	uint8_t Rcons[] = {
+	uint8_t initial_key[] = {
 		0x00, 0x01, 0x02, 0x03,
 		0x04, 0x05, 0x06, 0x07,
 		0x08, 0x09, 0x0a, 0x0b,
@@ -32,11 +33,16 @@ int main() {
 		0x88, 0x99, 0xaa, 0xbb,
 		0xcc, 0xdd, 0xee, 0xff};
 	
-
 	uint8_t cipher_text[16]; // 128
 
 	uint8_t *key_schedule; // expanded key
 
-	
+	aes = init_t_aes(initial_key, input);
+
+	aes_key_expansion(initial_key, key_schedule);
+
+
+	free(key_schedule);
+
 	return 0;
 }
