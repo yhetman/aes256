@@ -12,9 +12,50 @@
 
 #include "aes.h"
 
+
+
+uint8_t		*allocate_w(t_aes *aes)
+{
+	uint8_t *w;
+
+	switch (sizeof(aes->key))
+	{
+		default :
+		case 16 :
+			aes->N_k = 4;
+			aes->N_r = 10;
+			break;
+		case 24 :
+			aes->N_k = 6;
+			aes->N_r = 12;
+			break;
+		case 32 :
+			aes->N_k = 8;
+			aes->N_r = 14;
+			break;
+	}
+
+	w = (uint8_t *)malloc(sizeof(uint8_t) * aes->N_b * (aes->N_r + 1) * 4);
+	return (w);
+}
+
+void	init_t_aes(t_aes *aes, uint8_t *key, uint8_t *input)
+{
+	//t_aes 	data;
+
+	//data = (t_aes)malloc(sizeof(s_aes));
+	aes->N_b = 4;
+	aes->key = key;
+	aes->input = input;
+	aes->w = allocate_w(aes);
+
+	init_key_scheduler(aes);
+}
+
+
 int 	main()
 {
-	t_aes 	*aes;
+	t_aes 	aes;
 	uint8_t	i;
 
 	uint8_t initial_key[] = {
@@ -33,16 +74,17 @@ int 	main()
 		0x88, 0x99, 0xaa, 0xbb,
 		0xcc, 0xdd, 0xee, 0xff};
 	
-	uint8_t cipher_text[16]; // 128
+//	uint8_t cipher_text[16]; // 128
 
-	uint8_t *key_schedule; // expanded key
+	//uint8_t *key_schedule; // expanded key
 
-	aes = init_t_aes(initial_key, input);
+	init_t_aes(&aes, initial_key, input);
 
-	aes_key_expansion(initial_key, key_schedule);
+	cipher(&aes);
+//	init_t_aes(initial_key, key_schedule);
 
 
-	free(key_schedule);
+	free(aes.w);
 
 	return 0;
 }

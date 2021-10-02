@@ -34,22 +34,23 @@ void		rot_word(uint8_t *w)
 	w[3] = temp;
 }
 
-
-uint8_t		*Rcon(uint8_t i)
-{
-	uint8_t R[4] = {
+uint8_t R[4] = {
 					0x02, 0x00, 0x00, 0x00
 				};
 
+
+uint8_t		*Rcon(uint8_t i)
+{
 	if (i == 1)
 		R[0] = 0x01;
-	else if (i--; > 1)
+	else if (i-- > 1)
 	{
 		R[0] = 0x02;
 		//i--;
 		while (i-- > 1)
 		//{
-			R[0] = multiplication(R[0], 0x02);
+			;
+			// R[0] = multiplication(R[0], 0x02);
 		//	i--;
 		//}
 	}
