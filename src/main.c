@@ -6,7 +6,7 @@
 /*   By: yhetman <yhetman@student.unit.ua>                                    */
 /*                                                                            */
 /*   Created: 2021/09/24 15:35:50 by yhetman                                  */
-/*   Updated: 2021/10/03 00:15:07 by blukasho                                 */
+/*   Updated: 2021/10/03 00:52:52 by blukasho                                 */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,8 @@ int 	main()
 
 	init_t_aes(&aes, initial_key, input);
 
-//	cipher(&aes);
+	cipher(&aes);
 //	init_t_aes(initial_key, key_schedule);
-
 
 	free(aes.w);
 
