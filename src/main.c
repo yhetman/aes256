@@ -6,13 +6,14 @@
 /*   By: yhetman <yhetman@student.unit.ua>                                    */
 /*                                                                            */
 /*   Created: 2021/09/24 15:35:50 by yhetman                                  */
-/*   Updated: 2021/10/03 00:52:52 by blukasho                                 */
+/*   Updated: 2021/10/03 00:52:52 by yhetman                                  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "aes.h"
 
-uint8_t		*allocate_w(t_aes *aes)
+static uint8_t*
+allocate_w(t_aes *aes)
 {
 	uint8_t *w;
 
@@ -37,11 +38,9 @@ uint8_t		*allocate_w(t_aes *aes)
 	return (w);
 }
 
-static void	init_t_aes(t_aes *aes, uint8_t *key, uint8_t *input)
+static void
+init_t_aes(t_aes *aes, uint8_t *key, uint8_t *input)
 {
-	//t_aes 	data;
-
-	//data = (t_aes)malloc(sizeof(s_aes));
 	aes->N_b = 4;
 	aes->key = key;
 	aes->input = input;
@@ -50,10 +49,22 @@ static void	init_t_aes(t_aes *aes, uint8_t *key, uint8_t *input)
 	init_key_scheduler(aes);
 }
 
-int 	main()
+
+static void
+print_uint8_t(uint8_t *str)
+{
+	uint8_t i;
+
+	for (i = 0; i < 4; i++)
+		printf("%02x %02x %02x %02x ", str[4 * i + 0], str[4 * i + 1], str[4 * i + 2], str[4 * i + 3]);
+	printf("\n");
+}
+
+
+int
+main()
 {
 	t_aes 	aes;
-//	uint8_t	i;
 
 	uint8_t initial_key[] = {
 		0x00, 0x01, 0x02, 0x03,
@@ -70,15 +81,22 @@ int 	main()
 		0x44, 0x55, 0x66, 0x77,
 		0x88, 0x99, 0xaa, 0xbb,
 		0xcc, 0xdd, 0xee, 0xff};
+
+	printf("Plaintext:\n");
+	print_uint8_t(input);
+
 	
-//	uint8_t cipher_text[16]; // 128
-
-	//uint8_t *key_schedule; // expanded key
-
 	init_t_aes(&aes, initial_key, input);
 
 	cipher(&aes);
-//	init_t_aes(initial_key, key_schedule);
+	
+	printf("Ciphered text:\n");
+	print_uint8_t(aes.cipher_text);
+	
+	decipher(&aes);
+
+	printf("Deciphered text:\n");
+	print_uint8_t(aes.decipher_text);
 
 	free(aes.w);
 

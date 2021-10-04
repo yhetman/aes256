@@ -6,7 +6,7 @@
 /*   By: yhetman <yhetman@student.unit.ua>                                    */
 /*                                                                            */
 /*   Created: 2021/10/02 14:12:29 by yhetman                                  */
-/*   Updated: 2021/10/03 00:50:06 by blukasho                                 */
+/*   Updated: 2021/10/03 00:50:06 by yhetman                                  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,13 @@ uint8_t inverse_s_box[] = {
 	0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d
 };
 
+uint8_t R[4] = {
+	0x02, 0x00, 0x00, 0x00
+};
 
 
-void		sub_word(uint8_t *w)
+static void
+sub_word(uint8_t *w)
 {
 
 	uint8_t	i;
@@ -62,7 +66,8 @@ void		sub_word(uint8_t *w)
 }
 
 
-void		rot_word(uint8_t *w)
+static void
+rot_word(uint8_t *w)
 {
 	uint8_t	temp,
 			i;
@@ -73,32 +78,24 @@ void		rot_word(uint8_t *w)
 	w[3] = temp;
 }
 
-uint8_t R[4] = {
-					0x02, 0x00, 0x00, 0x00
-				};
-
-
-uint8_t		*Rcon(uint8_t i)
+static uint8_t*
+Rcon(uint8_t i)
 {
 	if (i == 1)
 		R[0] = 0x01;
 	else if (i-- > 1)
 	{
 		R[0] = 0x02;
-		//i--;
 		while (i-- > 1)
-		//{
-			;
-			// R[0] = multiplication(R[0], 0x02);
-		//	i--;
-		//}
+			R[0] = multiplication(R[0], 0x02);
 	}
 	
 	return (R);
 }
 
 
-void		add_round_coeff(uint8_t *x, uint8_t	*r, uint8_t *y)
+static void
+add_round_coeff(uint8_t *x, uint8_t	*r, uint8_t *y)
 {
 	uint8_t	i;
 
@@ -107,27 +104,24 @@ void		add_round_coeff(uint8_t *x, uint8_t	*r, uint8_t *y)
 }
 
 
-void		init_key_scheduler(t_aes *aes)
+void
+init_key_scheduler(t_aes *aes)
 {
 	uint8_t	temp[4],
 			i,
+			j,
 			length;
 
 	length = aes->N_b * (aes->N_r + 1);
 
-	for (i = 0; i < aes->N_k; i++) {
-		aes->w[4 * i + 0] = aes->key[4 * i + 0];
-		aes->w[4 * i + 1] = aes->key[4 * i + 1];
-		aes->w[4 * i + 2] = aes->key[4 * i + 2];
-		aes->w[4 * i + 3] = aes->key[4 * i + 3];
-	}
+	for (i = 0; i < aes->N_k; i++)
+		for (j = 0; j < 4; j++)
+			aes->w[4 * i + j] = aes->key[4 * i + j];
 
 	for (i = aes->N_k; i < length; i++)
-	{
-		temp[0] = aes->w[4 * (i - 1) + 0];
-		temp[1] = aes->w[4 * (i - 1) + 1];
-		temp[2] = aes->w[4 * (i - 1) + 2];
-		temp[3] = aes->w[4 * (i - 1) + 3];
+	{	
+		for (j = 0; j < 4; j++)
+			temp[j] = aes->w[4 * (i - 1) + j];
 
 		if (i % aes->N_k == 0)
 		{
@@ -137,9 +131,7 @@ void		init_key_scheduler(t_aes *aes)
 		}
 		else if (aes->N_k > 6 && i % aes->N_k == 4)
 			sub_word(temp);
-		aes->w[4 * i + 0] = aes->w[4 * (i - aes->N_k) + 0] ^ temp[0];
-		aes->w[4 * i + 1] = aes->w[4 * (i - aes->N_k) + 1] ^ temp[1];
-		aes->w[4 * i + 2] = aes->w[4 * (i - aes->N_k) + 2] ^ temp[2];
-		aes->w[4 * i + 3] = aes->w[4 * (i - aes->N_k) + 3] ^ temp[3];
+		for (j = 0; j < 4; j++)
+			aes->w[4 * i + j] = aes->w[4 * (i - aes->N_k) + j] ^ temp[j];
 	}
 }

@@ -3,14 +3,14 @@
 #*                                                                            *#
 #*   Makefile                                                                 *#
 #*                                                                            *#
-#*   By: blukasho <blukasho@ustork.com.ua>                                    *#
+#*   By: yhetman <yhetman@student.unit.ua>                                    *#
 #*                                                                            *#
-#*   Created: 2021/10/02 20:08:48 by blukasho                                 *#
-#*   Updated: 2021/10/03 00:37:12 by blukasho                                 *#
+#*   Created: 2021/10/02 20:08:48 by yhetman                                  *#
+#*   Updated: 2021/10/03 00:37:12 by yhetman                                  *#
 #*                                                                            *#
 #* ************************************************************************** *#
 
-SRCS = aes_cipher.c aes_decipher.c key_scheduler.c multiply.c mix.c
+SRCS = aes_cipher.c aes_decipher.c key_scheduler.c multiply.c common_functions.c
 
 SRCS_DIR = src/
 
