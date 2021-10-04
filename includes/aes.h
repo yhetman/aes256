@@ -17,6 +17,7 @@
 # include <stdint.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <inttypes.h>
 
 typedef struct 	s_aes
 {
@@ -53,5 +54,5 @@ void 			cipher(t_aes *aes);
 /***			aes_decipher.c 	 		***/
 void 			decipher(t_aes *aes);
 
-
+int read();
 #endif

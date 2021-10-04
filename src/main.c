@@ -60,6 +60,28 @@ print_uint8_t(uint8_t *str)
 	printf("\n");
 }
 
+int read() {
+    uint8_t *output ;
+    // unsigned char x ;
+    char str[2];
+	
+    FILE *f_gets = fopen("hexNumbers.txt", "r");
+
+    if(f_gets == NULL)
+	{
+		printf("Please point to a valid key file!\n");
+		fclose(f_gets);
+		return 0;
+	}
+
+	while ( fgets (str, 3, f_gets)!= NULL )
+	{
+    	output = (uint8_t *)(str);    
+    	printf("%02x ",*output++);
+	}
+   fclose(f_gets);
+   return 0;
+}
 
 int
 main()
@@ -82,6 +104,7 @@ main()
 		0x88, 0x99, 0xaa, 0xbb,
 		0xcc, 0xdd, 0xee, 0xff};
 
+	read();
 	printf("Plaintext:\n");
 	print_uint8_t(input);
 
