@@ -10,7 +10,7 @@
 #*                                                                            *#
 #* ************************************************************************** *#
 
-SRCS = aes_cipher.c aes_decipher.c key_scheduler.c multiply.c common_functions.c
+SRCS = aes_cipher.c aes_decipher.c reading.c key_scheduler.c multiply.c common_functions.c
 
 SRCS_DIR = src/
 

@@ -50,15 +50,15 @@ init_t_aes(t_aes *aes, uint8_t *key, uint8_t *input)
 }
 
 
-// static void
-// print_uint8_t(uint8_t *str)
-// {
-// 	uint8_t i;
+static void
+print_uint8_t(uint8_t *str)
+{
+	uint8_t i;
 
-// 	for (i = 0; i < 4; i++)
-// 		printf("%02x %02x %02x %02x " , str[4 * i + 0], str[4 * i + 1], str[4 * i + 2], str[4 * i + 3]);
-// 	printf("\n");
-// }
+	for (i = 0; i < 4; i++)
+		printf("%02x %02x %02x %02x " , str[4 * i + 0], str[4 * i + 1], str[4 * i + 2], str[4 * i + 3]);
+	printf("\n");
+}
 
 
 // static void	print_uint8_t(uint8_t *str)
@@ -71,6 +71,28 @@ init_t_aes(t_aes *aes, uint8_t *key, uint8_t *input)
 // 		printf("%02x ", i);
 // 	}
 // 	printf("\n");
+// }
+// int read() {
+//     uint8_t *output ;
+//     // unsigned char x ;
+//     char str[2];
+	
+//     FILE *f_gets = fopen("hexNumbers.txt", "r");
+
+//     if(f_gets == NULL)
+// 	{
+// 		printf("Please point to a valid key file!\n");
+// 		fclose(f_gets);
+// 		return 0;
+// 	}
+
+// 	while ( fgets (str, 3, f_gets)!= NULL )
+// 	{
+//     	output = (uint8_t *)(str);    
+//     	printf("%02x ",*output++);
+// 	}
+//    fclose(f_gets);
+//    return 0;
 // }
 
 int
@@ -102,6 +124,10 @@ main()
 		aes.key = NULL;
 		output = (uint8_t *)(byte);
 		init_t_aes(&aes, initial_key, output);
+// 	read();
+// 	printf("Plaintext:\n");
+// 	print_uint8_t(input);
+
 
 		// printf("Plaintext:\n");
 		// print_uint8_t(output);
