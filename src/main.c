@@ -56,38 +56,55 @@ print_uint8_t(uint8_t *str)
 	uint8_t i;
 
 	for (i = 0; i < 4; i++)
-		printf("%02x %02x %02x %02x ", str[4 * i + 0], str[4 * i + 1], str[4 * i + 2], str[4 * i + 3]);
+		printf("%02x %02x %02x %02x " , str[4 * i + 0], str[4 * i + 1], str[4 * i + 2], str[4 * i + 3]);
 	printf("\n");
 }
 
-int read() {
-    uint8_t *output ;
-    // unsigned char x ;
-    char str[2];
+
+// static void	print_uint8_t(uint8_t *str)
+// {
+// 	int		i;
+
+// 	for (; *str; str++)
+// 	{
+// 		i = (int)*str;
+// 		printf("%02x ", i);
+// 	}
+// 	printf("\n");
+// }
+// int read() {
+//     uint8_t *output ;
+//     // unsigned char x ;
+//     char str[2];
 	
-    FILE *f_gets = fopen("hexNumbers.txt", "r");
+//     FILE *f_gets = fopen("hexNumbers.txt", "r");
 
-    if(f_gets == NULL)
-	{
-		printf("Please point to a valid key file!\n");
-		fclose(f_gets);
-		return 0;
-	}
+//     if(f_gets == NULL)
+// 	{
+// 		printf("Please point to a valid key file!\n");
+// 		fclose(f_gets);
+// 		return 0;
+// 	}
 
-	while ( fgets (str, 3, f_gets)!= NULL )
-	{
-    	output = (uint8_t *)(str);    
-    	printf("%02x ",*output++);
-	}
-   fclose(f_gets);
-   return 0;
-}
+// 	while ( fgets (str, 3, f_gets)!= NULL )
+// 	{
+//     	output = (uint8_t *)(str);    
+//     	printf("%02x ",*output++);
+// 	}
+//    fclose(f_gets);
+//    return 0;
+// }
 
 int
 main()
 {
 	t_aes 	aes;
-
+	char	byte[16];
+	
+	uint8_t *output;
+	
+	FILE	*f_gets = fopen("hexNumbers.txt", "r");
+	
 	uint8_t initial_key[] = {
 		0x00, 0x01, 0x02, 0x03,
 		0x04, 0x05, 0x06, 0x07,
@@ -98,30 +115,36 @@ main()
 		0x18, 0x19, 0x1a, 0x1b,
 		0x1c, 0x1d, 0x1e, 0x1f};
 
-	uint8_t input[] = {
-		0x00, 0x11, 0x22, 0x33,
-		0x44, 0x55, 0x66, 0x77,
-		0x88, 0x99, 0xaa, 0xbb,
-		0xcc, 0xdd, 0xee, 0xff};
+	if(f_gets == NULL)
+		return (printf("Please point to a valid key file!\n"));
 
-	read();
-	printf("Plaintext:\n");
-	print_uint8_t(input);
+	while (fgets(byte, 17, f_gets))
+	{
+		aes.input = NULL;
+		aes.key = NULL;
+		output = (uint8_t *)(byte);
+		init_t_aes(&aes, initial_key, output);
+// 	read();
+// 	printf("Plaintext:\n");
+// 	print_uint8_t(input);
 
-	
-	init_t_aes(&aes, initial_key, input);
 
-	cipher(&aes);
-	
-	printf("Ciphered text:\n");
-	print_uint8_t(aes.cipher_text);
-	
-	decipher(&aes);
+		// printf("Plaintext:\n");
+		// print_uint8_t(output);
 
-	printf("Deciphered text:\n");
-	print_uint8_t(aes.decipher_text);
+		cipher(&aes);
 
-	free(aes.w);
+		// printf("Ciphered text:\n");
+		// print_uint8_t(aes.cipher_text);
 
+		// decipher(&aes);
+
+		// printf("Deciphered text:\n");
+		// print_uint8_t(aes.decipher_text);
+
+		free(aes.w);
+
+	}
+	fclose(f_gets);
 	return 0;
 }
