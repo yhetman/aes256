@@ -19,6 +19,7 @@
 # include <stdlib.h>
 # include <inttypes.h>
 
+
 typedef struct 	s_aes
 {
 	int 		N_k;
@@ -32,6 +33,8 @@ typedef struct 	s_aes
 	uint8_t		decipher_text[16];
 }				t_aes;
 
+
+typedef void 	(*function)(t_aes *);
 
 /***			multiply.c 				***/
 void			multiply_c(uint8_t *c, uint8_t *bytes, uint8_t * result);

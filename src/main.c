@@ -61,50 +61,29 @@ print_uint8_t(uint8_t *str)
 }
 
 
-// static void	print_uint8_t(uint8_t *str)
-// {
-// 	int		i;
-
-// 	for (; *str; str++)
-// 	{
-// 		i = (int)*str;
-// 		printf("%02x ", i);
-// 	}
-// 	printf("\n");
-// }
-// int read() {
-//     uint8_t *output ;
-//     // unsigned char x ;
-//     char str[2];
-	
-//     FILE *f_gets = fopen("hexNumbers.txt", "r");
-
-//     if(f_gets == NULL)
-// 	{
-// 		printf("Please point to a valid key file!\n");
-// 		fclose(f_gets);
-// 		return 0;
-// 	}
-
-// 	while ( fgets (str, 3, f_gets)!= NULL )
-// 	{
-//     	output = (uint8_t *)(str);    
-//     	printf("%02x ",*output++);
-// 	}
-//    fclose(f_gets);
-//    return 0;
-// }
-
 int
-main()
+main(int argc, char **argv)
 {
 	t_aes 	aes;
 	char	byte[16];
-	
 	uint8_t *output;
-	
-	FILE	*f_gets = fopen("hexNumbers.txt", "r");
-	
+	FILE	*f_gets;
+
+
+
+
+	if (argc != 2)
+	{
+		printf("Usage: ./aes [input_file].\n");
+		return 1;
+	}
+
+	if (!(f_gets = fopen(argv[1], "r")))
+	{
+
+		printf("Error: invalid input_file.\n");
+		return 1;
+	}
 	uint8_t initial_key[] = {
 		0x00, 0x01, 0x02, 0x03,
 		0x04, 0x05, 0x06, 0x07,
@@ -123,11 +102,8 @@ main()
 		aes.input = NULL;
 		aes.key = NULL;
 		output = (uint8_t *)(byte);
-		init_t_aes(&aes, initial_key, output);
-// 	read();
-// 	printf("Plaintext:\n");
-// 	print_uint8_t(input);
 
+		init_t_aes(&aes, initial_key, output);
 
 		// printf("Plaintext:\n");
 		// print_uint8_t(output);
@@ -135,7 +111,7 @@ main()
 		cipher(&aes);
 
 		// printf("Ciphered text:\n");
-		// print_uint8_t(aes.cipher_text);
+		print_uint8_t(aes.cipher_text);
 
 		// decipher(&aes);
 
