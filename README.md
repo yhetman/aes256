@@ -5,8 +5,8 @@ Implementation of Advanced Encrypting standart
 
 |      Standart    |     1 MB    |    10 MB    |   100 MB    |       1 GB        |
 |       :---:      |    :----:   |     :---:   |     :--:    |       :---:       | 
-|      AES-128     |   0m0.000s  |   0m0.00s   |   0m0.000s  |      0m0.000s     |
-|      AES-192     |   0m1.011s  |   0m10.945s |  1m29.946s  |      0m0.000s     |
+|      AES-128     |   0m0.781s  |   0m8.240s  |  0m56.165s  |      8m20.114s    |
+|      AES-192     |   0m1.011s  |   0m10.945s |  1m29.946s  |      9m2.488s     |
 |      AES-256     |   0m0.963s  |   0m9.352s  |  1m30.978s  |      9m6.243s     |
 
 
