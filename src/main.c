@@ -6,7 +6,7 @@
 /*   By: yhetman <yhetman@student.unit.ua>                                    */
 /*                                                                            */
 /*   Created: 2021/09/24 15:35:50 by yhetman                                  */
-/*   Updated: 2021/10/03 00:52:52 by yhetman                                  */
+/*   Updated: 2021/11/07 21:34:15 by yhetman                                  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,15 @@ init_t_aes(t_aes *aes, uint8_t *key, uint8_t *input)
 }
 
 
-static void
-print_uint8_t(uint8_t *str)
-{
-	uint8_t i;
+//static void
+//print_uint8_t(uint8_t *str)
+//{
+//	uint8_t i;
 
-	for (i = 0; i < 4; i++)
-		printf("%02x %02x %02x %02x " , str[4 * i + 0], str[4 * i + 1], str[4 * i + 2], str[4 * i + 3]);
-	printf("\n");
-}
+//	for (i = 0; i < 4; i++)
+//		printf("%02x %02x %02x %02x " , str[4 * i + 0], str[4 * i + 1], str[4 * i + 2], str[4 * i + 3]);
+//	printf("\n");
+//}
 
 
 int
@@ -85,7 +85,22 @@ main(int argc, char **argv)
 		return 1;
 	}
 	
-	uint8_t initial_key[] = {
+	uint8_t initial_key[] = {	// aes-128
+		0x00, 0x01, 0x02, 0x03,
+		0x04, 0x05, 0x06, 0x07,
+		0x08, 0x09, 0x0a, 0x0b,
+		0x0c, 0x0d, 0x0e, 0x0f};
+
+	
+/*	uint8_t initial_key[] = {	// aes-192
+		0x00, 0x01, 0x02, 0x03,
+		0x04, 0x05, 0x06, 0x07,
+		0x08, 0x09, 0x0a, 0x0b,
+		0x0c, 0x0d, 0x0e, 0x0f,
+		0x10, 0x11, 0x12, 0x13,
+		0x14, 0x15, 0x16, 0x17};
+*/
+/*	uint8_t initial_key[] = {	// aes-256
 		0x00, 0x01, 0x02, 0x03,
 		0x04, 0x05, 0x06, 0x07,
 		0x08, 0x09, 0x0a, 0x0b,
@@ -94,7 +109,7 @@ main(int argc, char **argv)
 		0x14, 0x15, 0x16, 0x17,
 		0x18, 0x19, 0x1a, 0x1b,
 		0x1c, 0x1d, 0x1e, 0x1f};
-
+*/
 	if(f_gets == NULL)
 		return (printf("Please point to a valid key file!\n"));
 
@@ -112,7 +127,7 @@ main(int argc, char **argv)
 		cipher(&aes);
 
 		// printf("Ciphered text:\n");
-		print_uint8_t(aes.cipher_text);
+	    // print_uint8_t(aes.cipher_text);
 
 		// decipher(&aes);
 
