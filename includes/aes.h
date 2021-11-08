@@ -24,9 +24,9 @@
 
 typedef struct 	s_aes
 {
-	int 		N_k;
-	int 		N_r;
-	int 		K;
+	size_t 		N_k;
+	size_t 		N_r;
+	size_t 		K;
 	uint8_t		*key;
 	uint8_t		*w;
 	uint8_t		*input;
@@ -38,9 +38,10 @@ typedef struct 	s_options
 {
 	bool		mode;
 	int 		stream_mode;
+	size_t		input_bytes;
 }				t_options;
 
-typedef void	(*stream_modes)(uint8_t*, uint8_t*, uint8_t);
+typedef void	(*stream_modes)(uint8_t*, uint8_t*, size_t);
 typedef void 	(*function)(t_aes *);
 
 /***			multiply.c 				***/
@@ -79,11 +80,20 @@ void			initializer_for_stream_modes(uint8_t *initial_key,
 
 
 /***			ecb 		  ***/
-void			ecb_encrypting(uint8_t *input, uint8_t*key, uint8_t input_legth);
-void			ecb_decrypting(uint8_t *input, uint8_t*key, uint8_t input_legth);
+void			ecb_encrypting(uint8_t *input, uint8_t*key, size_t input_legth);
+void			ecb_decrypting(uint8_t *input, uint8_t*key, size_t input_legth);
 
 /***			cbc 		  ***/
-void			cbc_decrypting(uint8_t *input, uint8_t *key, uint8_t input_legth);
-void			cbc_encrypting(uint8_t *input, uint8_t *key, uint8_t input_legth);
+void			cbc_decrypting(uint8_t *input, uint8_t *key, size_t input_legth);
+void			cbc_encrypting(uint8_t *input, uint8_t *key, size_t input_legth);
+
+
+/***			ofb 		  ***/
+void			ofb_decrypting(uint8_t *input, uint8_t *key, size_t input_legth);
+void			ofb_encrypting(uint8_t *input, uint8_t *key, size_t input_legth);
+
+
+/***			ctr 		  ***/
+void			ctr(uint8_t *input, uint8_t*key, size_t input_legth);
 
 #endif

@@ -15,14 +15,14 @@
 
 
 void
-cbc_encrypting(uint8_t *input, uint8_t *key, uint8_t input_legth)
+cbc_encrypting(uint8_t *input, uint8_t *key, size_t input_legth)
 {
 	t_aes 	cbc_aes;
 	uint8_t	*IV,
 			amount_blocks,
 			counter = 0,
 			i;
-	long 	j;
+	size_t 	j;
 
 	amount_blocks = input_legth / 16;
 
@@ -42,17 +42,18 @@ cbc_encrypting(uint8_t *input, uint8_t *key, uint8_t input_legth)
 	for (j = input_legth - cbc_aes.N_k * 4; j < input_legth; j++, counter++)
 		input[j] = IV[counter];
 
+	free(IV);
 	free(cbc_aes.w);
 }
 
 void
-cbc_decrypting(uint8_t *input, uint8_t *key, uint8_t input_legth)
+cbc_decrypting(uint8_t *input, uint8_t *key, size_t input_legth)
 {
 	t_aes 	cbc_aes;
 	uint8_t	*IV,
 			amount_blocks,
 			counter = 0;
-	long 	i,
+	size_t 	i,
 			j;
 
 	amount_blocks = input_legth / 16;
@@ -74,5 +75,7 @@ cbc_decrypting(uint8_t *input, uint8_t *key, uint8_t input_legth)
 	decrypt_block(&cbc_aes, input);
 	add_round_key(input,  IV, 0);
 	add_round_key(&input[input_legth - 2 * 16], &input[input_legth - 2 * 16], 0);
+
+	free(IV);
 	free(cbc_aes.w);
 }

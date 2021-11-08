@@ -15,7 +15,7 @@
 
 
 void
-ecb_encrypting(uint8_t *input, uint8_t*key, uint8_t input_legth)
+ecb_encrypting(uint8_t *input, uint8_t*key, size_t input_legth)
 {
 	t_aes 	ecb_aes;
 	uint8_t	amount_blocks,
@@ -28,7 +28,7 @@ ecb_encrypting(uint8_t *input, uint8_t*key, uint8_t input_legth)
 }
 
 void
-ecb_decrypting(uint8_t *input, uint8_t*key, uint8_t input_legth)
+ecb_decrypting(uint8_t *input, uint8_t*key, size_t input_legth)
 {
 	t_aes 	ecb_aes;
 	uint8_t	amount_blocks,

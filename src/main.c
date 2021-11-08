@@ -115,6 +115,13 @@ get_flags(int argc, char ** argv, FILE ** input, FILE ** output,
 }
 
 
+void    init_options(t_options *options)
+{
+    options->mode = true;
+    options->stream_mode = 0;
+    options->input_bytes = 0;
+}
+
 int
 main(int argc, char **argv)
 {
@@ -124,21 +131,17 @@ main(int argc, char **argv)
     t_options	options;
     size_t		keysize,
     			blocks;
-    			// input_size;
     function    mode_;
     t_aes 		aes;
 	char		byte[16];
 	uint8_t 	*output,
 				*initial_key;
 
-	options.mode = true;
-	options.stream_mode = 0;
-	
+	init_options(&options);
+
     if (get_flags(argc, argv, &input, &outputfile, &keyfile, \
         &keysize, &options) != 0)
        return 1;
-
-    mode_ = (options.mode == true) ? &cipher : &decipher;
 
 	initial_key = (uint8_t*) malloc (sizeof(uint8_t) * keysize);
 
@@ -148,10 +151,15 @@ main(int argc, char **argv)
         exit(1);
     }
 
+    fseek(input, 0L, SEEK_END);
+    options.input_bytes = ftell(input);
+    fseek(input, 0, SEEK_SET);
+
     if (options.stream_mode > 0 && options.stream_mode < 6)
     	initializer_for_stream_modes(initial_key, input, outputfile, &options);
     else
     {
+        mode_ = (options.mode == true) ? &cipher : &decipher;
     	while ((blocks = fread(byte, 1, 17, input)))
 		{
 			aes.input = NULL;

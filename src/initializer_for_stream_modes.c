@@ -14,29 +14,28 @@
 
 
 
-stream_modes	encrypting_functions[2] =
+stream_modes	encrypting_functions[4] =
 {
 	&ecb_encrypting,
-	&cbc_encrypting
+	&cbc_encrypting,
 	// &cfb_encrypting,
-	// &ofb_encrypting,
-	// &ctr_encrypting
+	&ofb_encrypting,
+	&ctr
 };
 
-stream_modes	decrypting_functions[2] =
+stream_modes	decrypting_functions[4] =
 {
 	&ecb_decrypting,
- 	&cbc_decrypting
+ 	&cbc_decrypting,
 // 	&cfb_decrypting,
-// 	&ofb_decrypting,
-// 	&ctr_decrypting
+	&ofb_decrypting,
+	&ctr
 };
 
 static void
-redirect_to_stream_mode(t_options *options, uint8_t *buffer, uint8_t *key,
-	uint8_t filesize)
+redirect_to_stream_mode(t_options *options, uint8_t *buffer, uint8_t *key, \
+	size_t filesize)
 {
-	printf("%i\n", filesize);
 	if (options->mode == true)
 		encrypting_functions[options->stream_mode - 1](buffer, key, filesize);
 	else
@@ -49,37 +48,22 @@ initializer_for_stream_modes(uint8_t *initial_key,
 {	
 	uint8_t 	*buffer,
 				padding = 0;
-	uint8_t		blocks;
 
-	fseek(input, 0, SEEK_END);
-    blocks = ftell(input);
-    printf("%i\n", blocks);
-    fseek(input, 0, SEEK_SET);
 
     if (options->stream_mode == 2 || (options->stream_mode == 4 && options->mode == true))
-    	blocks += 16;
-    buffer = (uint8_t *)malloc(sizeof(uint8_t) *(blocks + padding));
-	if(blocks % 16 != 0)
+    	options->input_bytes += 16;
+    buffer = (uint8_t *)malloc(sizeof(uint8_t) *(options->input_bytes + padding));
+	if(options->input_bytes % 16 != 0)
 	{
-		padding = (blocks / 16 + 1) * 16 - blocks;
-		for(long i = blocks; i < blocks + padding; i++)
+		padding = (options->input_bytes / 16 + 1) * 16 - options->input_bytes;
+		for(size_t i = options->input_bytes; i < options->input_bytes + padding; i++)
 			buffer[i] = 32;
 	}
-	fread(buffer, 1, blocks, input);
-	redirect_to_stream_mode(options, buffer, initial_key, blocks + padding);
-	fwrite(buffer, 1, blocks + padding, output);
+	
+	fread(buffer, 1, options->input_bytes, input);
+	
+	redirect_to_stream_mode(options, buffer, initial_key, options->input_bytes + padding);
+	
+	fwrite(buffer, 1, options->input_bytes + padding, output);
 	free(buffer);
 }
-
-
-// FILE* searchForFilePlus(char* path, char* searchedItem){
-// 		printf("\nEnter path to %s\t", searchedItem);
-// 		scanf("%s", path);
-// 		return fopen(path, "r");
-// }
-
-// long getFileSize(char* fileName){
-// 		struct stat fSize;
-// 		stat(fileName, &fSize);
-// 		return fSize.st_size;
-// }
