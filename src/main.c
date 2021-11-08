@@ -38,7 +38,7 @@ allocate_w(t_aes *aes)
 	return (w);
 }
 
-static void
+void
 init_t_aes(t_aes *aes, uint8_t *key, uint8_t *input)
 {
 	aes->N_b = 4;
@@ -46,97 +46,126 @@ init_t_aes(t_aes *aes, uint8_t *key, uint8_t *input)
 	aes->input = input;
 	aes->w = allocate_w(aes);
 
-	init_key_scheduler(aes);
+	key_expansion(aes);
 }
 
 
-//static void
-//print_uint8_t(uint8_t *str)
-//{
-//	uint8_t i;
+static int
+get_flags(int argc, char ** argv, FILE ** input, FILE ** output,
+	FILE **key, size_t *keysize, t_options *options)
+{
+    int 	flag,
+    		check_flags;
 
-//	for (i = 0; i < 4; i++)
-//		printf("%02x %02x %02x %02x " , str[4 * i + 0], str[4 * i + 1], str[4 * i + 2], str[4 * i + 3]);
-//	printf("\n");
-//}
+    check_flags = 0;
+    
+    while ((flag = getopt(argc, argv, "i:o:s:k:m:deh")) != -1)
+    {
+        switch (flag)
+        {
+            case 'i':
+                *input = fopen(optarg, "rb");
+                check_flags++;
+                break;
+            case 'o':
+                *output = fopen(optarg, "wb");
+                check_flags++;
+                break;
+            case 's':
+            	*keysize = atoi(optarg);
+            	check_flags++;
+            	break;
+            case 'k':
+                *key = fopen(optarg, "rb");
+                check_flags++;
+                break;
+            case 'd':
+                options->mode = false;
+                break;
+            case 'e':
+                options->mode = true;
+                break;
+            case 'm':
+                options->stream_mode = atoi(optarg);
+                break;
+            case 'h':
+                printf("Usage:  ./aes -i ./input_file -o ./output_file -s {16 | 24 | 32} -k ./key_file\n");
+                printf("Flags:\n");
+                printf("\t-s\t-- specify the key length of AES.\n");
+                printf("\t-e\t-- specify the encrypting process.\n");
+                printf("\t-d\t-- specify the decrypting process.\n");
+                printf("\t-m\t-- specify stream mode of AES.\n");
+                printf("Available modes:\n\t\t1 -- ECB;\n");
+                printf("\t\t2 -- CBC;\n");
+                printf("\t\t3 -- CFB;\n");
+                printf("\t\t4 -- OFB;\n");
+                printf("\t\t5 -- CTR.\n");                
+                return 1;
+            case '?':
+                fprintf(stderr, "%s unsuported flag.", optarg);
+                return 1;
+        }
+    }
+    if (check_flags < 4)
+    {
+        fprintf(stderr, "Needs to satisfy all parameters, use -h for help.\n");
+        return 1;
+    }
+
+    return 0;
+}
 
 
 int
 main(int argc, char **argv)
 {
-	t_aes 	aes;
-	char	byte[16];
-	uint8_t *output;
-	FILE	*f_gets;
+    FILE    	*input,
+            	*outputfile,
+            	*keyfile;
+    t_options	options;
+    size_t		keysize,
+    			blocks;
+    			// input_size;
+    function    mode_;
+    t_aes 		aes;
+	char		byte[16];
+	uint8_t 	*output,
+				*initial_key;
 
+	options.mode = true;
+	options.stream_mode = 0;
+    if (get_flags(argc, argv, &input, &outputfile, &keyfile, \
+        &keysize, &options) != 0)
+       return 1;
+    mode_ = (options.mode == true) ? &cipher : &decipher;
+	initial_key = (uint8_t*) malloc (sizeof(uint8_t) * keysize);
+	if ((blocks = fread(initial_key, 1, keysize, keyfile)) != keysize)
+    {
+        printf("Error! Invalid key length!\n");
+        exit(1);
+    }
 
-
-
-	if (argc != 2)
-	{
-		printf("Usage: ./aes [input_file].\n");
-		return 1;
+    if (options.stream_mode > 0 && options.stream_mode < 6)
+    	initializer_for_stream_modes(initial_key, input, outputfile, &options);
+    else
+    {
+    	while ((blocks = fread(byte, 1, 17, input)))
+		{
+			aes.input = NULL;
+			aes.key = NULL;
+			output = (uint8_t *)(byte);
+			init_t_aes(&aes, initial_key, output);
+			mode_(&aes);
+			if (options.mode == false)
+				fwrite(aes.decipher_text, 1, blocks, outputfile);
+			else
+				fwrite(aes.cipher_text, 1, blocks, outputfile);
+			free(aes.w);
+		}
 	}
-
-	if (!(f_gets = fopen(argv[1], "r")))
-	{
-
-		printf("Error: invalid input_file.\n");
-		return 1;
-	}
-	
-	uint8_t initial_key[] = {	// aes-128
-		0x00, 0x01, 0x02, 0x03,
-		0x04, 0x05, 0x06, 0x07,
-		0x08, 0x09, 0x0a, 0x0b,
-		0x0c, 0x0d, 0x0e, 0x0f};
-
-	
-/*	uint8_t initial_key[] = {	// aes-192
-		0x00, 0x01, 0x02, 0x03,
-		0x04, 0x05, 0x06, 0x07,
-		0x08, 0x09, 0x0a, 0x0b,
-		0x0c, 0x0d, 0x0e, 0x0f,
-		0x10, 0x11, 0x12, 0x13,
-		0x14, 0x15, 0x16, 0x17};
-*/
-/*	uint8_t initial_key[] = {	// aes-256
-		0x00, 0x01, 0x02, 0x03,
-		0x04, 0x05, 0x06, 0x07,
-		0x08, 0x09, 0x0a, 0x0b,
-		0x0c, 0x0d, 0x0e, 0x0f,
-		0x10, 0x11, 0x12, 0x13,
-		0x14, 0x15, 0x16, 0x17,
-		0x18, 0x19, 0x1a, 0x1b,
-		0x1c, 0x1d, 0x1e, 0x1f};
-*/
-	if(f_gets == NULL)
-		return (printf("Please point to a valid key file!\n"));
-
-	while (fgets(byte, 17, f_gets))
-	{
-		aes.input = NULL;
-		aes.key = NULL;
-		output = (uint8_t *)(byte);
-
-		init_t_aes(&aes, initial_key, output);
-
-		// printf("Plaintext:\n");
-		// print_uint8_t(output);
-
-		cipher(&aes);
-
-		// printf("Ciphered text:\n");
-	    // print_uint8_t(aes.cipher_text);
-
-		// decipher(&aes);
-
-		// printf("Deciphered text:\n");
-		// print_uint8_t(aes.decipher_text);
-
-		free(aes.w);
-
-	}
-	fclose(f_gets);
-	return 0;
+	free(initial_key);
+    fclose(input);
+    fclose(outputfile);
+    fclose(keyfile);
+    return 0;
 }

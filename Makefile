@@ -10,7 +10,9 @@
 #*                                                                            *#
 #* ************************************************************************** *#
 
-SRCS = aes_cipher.c aes_decipher.c reading.c key_scheduler.c multiply.c common_functions.c
+SRCS = aes_cipher.c aes_decipher.c reading.c key_expansion.c \
+	print_uint8_t.c multiply.c common_functions.c \
+	initializer_for_stream_modes.c ecb.c
 
 SRCS_DIR = src/
 

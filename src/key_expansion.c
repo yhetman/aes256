@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                                            */
-/*   key_scheduler.c                                                          */
+/*   key_expansion.c                                                          */
 /*                                                                            */
 /*   By: yhetman <yhetman@student.unit.ua>                                    */
 /*                                                                            */
@@ -105,7 +105,7 @@ add_round_coeff(uint8_t *x, uint8_t	*r, uint8_t *y)
 
 
 void
-init_key_scheduler(t_aes *aes)
+key_expansion(t_aes *aes)
 {
 	uint8_t	temp[4],
 			i,

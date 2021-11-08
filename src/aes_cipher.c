@@ -50,21 +50,13 @@ shift_rows(uint8_t *state, int N_b)
 
 
 void
-cipher(t_aes *aes)
+encrypt_block(t_aes *aes, uint8_t *state)
 {
-	uint8_t	state[4 * aes->N_b],
-			round,
-			i,
-			j;
-
+	uint8_t round;
 	uint8_t c[4] = {
 		0x02, 0x01, 0x01, 0x03
 	};
 	
-	for (i = 0; i < 4; i++)
-		for (j = 0; j < aes->N_b; j++)
-			state[aes->N_b * i + j] = aes->input[i + 4 * j];
-
 
 	add_round_key(state, aes->w, 0, aes->N_b);
 
@@ -79,7 +71,21 @@ cipher(t_aes *aes)
 	sub_bytes(state, aes->N_b);
 	shift_rows(state, aes->N_b);
 	add_round_key(state, aes->w, aes->N_r, aes->N_b);
+}
 
+void
+cipher(t_aes *aes)
+{
+	uint8_t	state[4 * aes->N_b],
+			i,
+			j;
+
+	for (i = 0; i < 4; i++)
+		for (j = 0; j < aes->N_b; j++)
+			state[aes->N_b * i + j] = aes->input[i + 4 * j];
+
+	encrypt_block(aes, state);
+	
 	for (i = 0; i < 4; i++)
 		for (j = 0; j < aes->N_b; j++)
 			aes->cipher_text[i + 4 * j] = state[aes->N_b * i + j];
