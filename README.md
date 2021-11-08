@@ -1,5 +1,8 @@
-# aes256
-Implementation of Advanced Encrypting standart
+# AES 128 192 256
+
+---
+
+Implementation of Advanced Encrypting Standart in pure C.
 
 
 ### Available standarts
