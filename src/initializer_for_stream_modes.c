@@ -14,20 +14,20 @@
 
 
 
-stream_modes	encrypting_functions[4] =
+stream_modes	encrypting_functions[5] =
 {
 	&ecb_encrypting,
 	&cbc_encrypting,
-	// &cfb_encrypting,
+	&cfb_encrypting,
 	&ofb_encrypting,
 	&ctr
 };
 
-stream_modes	decrypting_functions[4] =
+stream_modes	decrypting_functions[5] =
 {
 	&ecb_decrypting,
  	&cbc_decrypting,
-// 	&cfb_decrypting,
+	&cfb_decrypting,
 	&ofb_decrypting,
 	&ctr
 };

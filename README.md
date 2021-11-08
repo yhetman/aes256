@@ -1,13 +1,24 @@
 # aes256
 Implementation of Advanced Encrypting standart
 
-### Benchmarks
+
+### Available standarts
+
+|       Name       |  Key size | Number of Rounds  |
+|       :---:      |    :--:   |       :---:       | 
+|      AES-128     |    128    |        10         |
+|      AES-192     |    192    |        12         |
+|      AES-256     |    256    |        14         |
+
+
+
+### Benchmarks for AES as block cipher
 
 |      Standart    |     1 MB    |    10 MB    |   100 MB    |       1 GB        |
 |       :---:      |    :----:   |     :---:   |     :--:    |       :---:       | 
-|      AES-128     |   0m0.781s  |   0m8.240s  |  0m56.165s  |      8m20.114s    |
-|      AES-192     |   0m1.011s  |   0m10.945s |  1m29.946s  |      9m2.488s     |
-|      AES-256     |   0m0.963s  |   0m9.352s  |  1m30.978s  |      9m6.243s     |
+|      AES-128     |   0m0.311s  |   0m2.833s  |  0m28.657s  |      7m24.910s    |
+|      AES-192     |   0m0.291s  |   0m2.796s  |  0m28.343s  |      7m43.737s    |
+|      AES-256     |   0m0.343s  |   0m2.877s  |  0m28.450s  |      7m36.052s    |
 
 
 ### Compiling
@@ -28,15 +39,37 @@ make re
 ### Usage
 
 ```
-./aes ./path_to_input_file
+./aes -i ./input_file -o ./output_file -s {16 | 24 | 32} -k ./key_file -m {1 | 2 | 3 | 4 | 5}
 ```
 
-### Available standarts
+### Options and flags
 
-|       Name       |  Key size | Number of Rounds  |
-|       :---:      |    :--:   |       :---:       | 
-|      AES-128     |    128    |        10         |
-|      AES-192     |    192    |        12         |
-|      AES-256     |    256    |        14         |
+```
 
+Flags:
+	-i  -- specify ./path/to/input/file
+	-o  -- specify ./path/to/output/file
+	-k  -- specify ./path/to/key/file
+	-s	-- specify the key length in bytes.
+	-e	-- specify the encrypting process.
+	-d	-- specify the decrypting process.
+	-m	-- specify stream mode of AES.
 
+Available stream modes:
+		1 -- ECB;
+		2 -- CBC;
+		3 -- CFB;
+		4 -- OFB;
+		5 -- CTR
+
+```
+
+### Benchmarks for AES-256 stream modes
+
+|   Mode    |     1 MB    |    10 MB    |   100 MB    |
+|   :---:   |    :----:   |     :---:   |     :--:    | 
+|    ECB    |   0m0.030s  |   0m0.069s  |  0m0.500s   |
+|    CBC    |   0m0.186s  |   0m1.652s  |  0m16.648s  |
+|    CFB    |   0m0.201s  |   0m1.641s  |  0m16.333s  |
+|    OFB    |   0m0.187s  |   0m1.671s  |  0m17.022s  |
+|    CTR    |   0m0.189s  |   0m1.662s  |  0m19.935s  |

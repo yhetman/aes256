@@ -88,10 +88,14 @@ void			cbc_decrypting(uint8_t *input, uint8_t *key, size_t input_legth);
 void			cbc_encrypting(uint8_t *input, uint8_t *key, size_t input_legth);
 
 
+/***			cfb 		  ***/
+void			cfb_encrypting(uint8_t *input, uint8_t *key, size_t input_legth);
+void			cfb_decrypting(uint8_t *input, uint8_t *key, size_t input_legth);
+
+
 /***			ofb 		  ***/
 void			ofb_decrypting(uint8_t *input, uint8_t *key, size_t input_legth);
 void			ofb_encrypting(uint8_t *input, uint8_t *key, size_t input_legth);
-
 
 /***			ctr 		  ***/
 void			ctr(uint8_t *input, uint8_t*key, size_t input_legth);
