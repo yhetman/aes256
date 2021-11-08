@@ -112,7 +112,7 @@ key_expansion(t_aes *aes)
 			j,
 			length;
 
-	length = aes->N_b * (aes->N_r + 1);
+	length = 4 * (aes->N_r + 1);
 
 	for (i = 0; i < aes->N_k; i++)
 		for (j = 0; j < 4; j++)

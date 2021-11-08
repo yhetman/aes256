@@ -24,6 +24,7 @@ ecb_encrypting(uint8_t *input, uint8_t*key, uint8_t input_legth)
 	init_t_aes(&ecb_aes, key, NULL);
 	for (i = 0; i < amount_blocks; i++)
 		encrypt_block(&ecb_aes, &input[i * 16]);
+	free(ecb_aes.w);	
 }
 
 void
@@ -37,4 +38,5 @@ ecb_decrypting(uint8_t *input, uint8_t*key, uint8_t input_legth)
 	init_t_aes(&ecb_aes, key, NULL);
 	for (i = 0; i < amount_blocks; i++)
 		decrypt_block(&ecb_aes, &input[i * 16]);
+	free(ecb_aes.w);
 }

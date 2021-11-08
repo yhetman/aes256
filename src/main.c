@@ -34,14 +34,13 @@ allocate_w(t_aes *aes)
 			break;
 	}
 
-	w = (uint8_t *)malloc(sizeof(uint8_t) * aes->N_b * (aes->N_r + 1) * 4);
+	w = (uint8_t *)malloc(sizeof(uint8_t) * (aes->N_r + 1) * 16);
 	return (w);
 }
 
 void
 init_t_aes(t_aes *aes, uint8_t *key, uint8_t *input)
 {
-	aes->N_b = 4;
 	aes->key = key;
 	aes->input = input;
 	aes->w = allocate_w(aes);
@@ -134,11 +133,15 @@ main(int argc, char **argv)
 
 	options.mode = true;
 	options.stream_mode = 0;
+	
     if (get_flags(argc, argv, &input, &outputfile, &keyfile, \
         &keysize, &options) != 0)
        return 1;
+
     mode_ = (options.mode == true) ? &cipher : &decipher;
+
 	initial_key = (uint8_t*) malloc (sizeof(uint8_t) * keysize);
+
 	if ((blocks = fread(initial_key, 1, keysize, keyfile)) != keysize)
     {
         printf("Error! Invalid key length!\n");

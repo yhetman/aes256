@@ -12,34 +12,51 @@
 
 #include "aes.h"
 
+char
+*random_string(char *str, size_t size)
+{
+	char 	charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	size_t 	n;
+
+	for (n = 0; n < size; n++)
+	{
+		int key = rand() % (int) (sizeof charset - 1);
+		str[n] = charset[key];
+	}
+	
+	str[size] = '\0';
+
+  return str;
+}
+
 void
-add_round_key(uint8_t *state, uint8_t *w, uint8_t r, int N_b)
+add_round_key(uint8_t *state, uint8_t *w, uint8_t r)
 {
 	uint8_t	i,
 			j;
 	
-	for (i = 0; i < N_b; i++)
+	for (i = 0; i < 4; i++)
 		for (j = 0; j < 4; j++)
-			state[N_b * j + i] = state[N_b * j + i]^w[4 * N_b * r + 4 * i + j];	
+			state[4 * j + i] ^= w[16 * r + 4 * i + j];	
 }
 
 
 void
-mix_columns(uint8_t *state, int N_b, uint8_t *c)
+mix_columns(uint8_t *state, uint8_t *c)
 {
 	uint8_t i,
 			j,
 			column[4],
 			result[4];
 
-	for (j = 0; j < N_b; j++)
+	for (j = 0; j < 4; j++)
 	{
 		for (i = 0; i < 4; i++)
-			column[i] = state[N_b * i + j];
+			column[i] = state[4 * i + j];
 
 		multiply_c(c, column, result);
 
 		for (i = 0; i < 4; i++)
-			state[N_b * i + j] = result[i];
+			state[4 * i + j] = result[i];
 	}
 }

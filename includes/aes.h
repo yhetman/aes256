@@ -26,7 +26,6 @@ typedef struct 	s_aes
 {
 	int 		N_k;
 	int 		N_r;
-	int 		N_b;
 	int 		K;
 	uint8_t		*key;
 	uint8_t		*w;
@@ -50,9 +49,9 @@ void			multiply_c(uint8_t *c, uint8_t *bytes, uint8_t * result);
 
 
 /***			common_functions.c		***/
-void			mix_columns(uint8_t *state, int N_b, uint8_t *c);
-void 			add_round_key(uint8_t *state, uint8_t *w, uint8_t r, int N_b);
-
+void			mix_columns(uint8_t *state, uint8_t *c);
+void 			add_round_key(uint8_t *state, uint8_t *w, uint8_t r);
+char			*random_string(char *str, size_t size);
 
 /***			key_expansion.c 		***/
 void			key_expansion(t_aes *aes);
@@ -83,5 +82,8 @@ void			initializer_for_stream_modes(uint8_t *initial_key,
 void			ecb_encrypting(uint8_t *input, uint8_t*key, uint8_t input_legth);
 void			ecb_decrypting(uint8_t *input, uint8_t*key, uint8_t input_legth);
 
+/***			cbc 		  ***/
+void			cbc_decrypting(uint8_t *input, uint8_t *key, uint8_t input_legth);
+void			cbc_encrypting(uint8_t *input, uint8_t *key, uint8_t input_legth);
 
 #endif
