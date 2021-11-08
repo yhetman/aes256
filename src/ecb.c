@@ -15,7 +15,7 @@
 
 
 void
-ecb_encrypting(uint8_t *input, uint8_t*key, uint8_t input_legth, FILE * output)
+ecb_encrypting(uint8_t *input, uint8_t*key, uint8_t input_legth)
 {
 	t_aes 	ecb_aes;
 	uint8_t	amount_blocks,
@@ -23,8 +23,18 @@ ecb_encrypting(uint8_t *input, uint8_t*key, uint8_t input_legth, FILE * output)
 	amount_blocks = input_legth / 16;
 	init_t_aes(&ecb_aes, key, NULL);
 	for (i = 0; i < amount_blocks; i++)
-	{
 		encrypt_block(&ecb_aes, &input[i * 16]);
-		fwrite(ecb_aes.cipher_text, 1, 16, output);
-	}
+}
+
+void
+ecb_decrypting(uint8_t *input, uint8_t*key, uint8_t input_legth)
+{
+	t_aes 	ecb_aes;
+	uint8_t	amount_blocks,
+			i;
+
+	amount_blocks = input_legth / 16;
+	init_t_aes(&ecb_aes, key, NULL);
+	for (i = 0; i < amount_blocks; i++)
+		decrypt_block(&ecb_aes, &input[i * 16]);
 }

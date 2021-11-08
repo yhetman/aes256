@@ -45,23 +45,13 @@ inverse_shift_rows(uint8_t *state, int N_b)
 	}
 }
 
-
 void
-decipher(t_aes *aes)
+decrypt_block(t_aes *aes, uint8_t *state)
 {
-	uint8_t state[4 * aes->N_b],
-			round,
-			i,
-			j;
-
+	uint8_t round;
 	uint8_t	c[4] = {
 		0x0e, 0x09, 0x0d, 0x0b
 	};
-	
-	for (i = 0; i < 4; i++)
-		for (j = 0; j < aes->N_b; j++)
-			state[aes->N_b * i + j] = aes->cipher_text[i + 4 * j];
-
 
 	add_round_key(state, aes->w, aes->N_r, aes->N_b);
 
@@ -76,7 +66,24 @@ decipher(t_aes *aes)
 	inverse_shift_rows(state, aes->N_b);
 	inverse_sub_bytes(state, aes->N_b);
 	add_round_key(state, aes->w, 0, aes->N_b);
+}
 
+
+void
+decipher(t_aes *aes)
+{
+	uint8_t state[4 * aes->N_b],
+			i,
+			j;
+
+	
+	for (i = 0; i < 4; i++)
+		for (j = 0; j < aes->N_b; j++)
+			state[aes->N_b * i + j] = aes->cipher_text[i + 4 * j];
+
+
+	decrypt_block(aes, state);
+	
 	for (i = 0; i < 4; i++)
 		for (j = 0; j < aes->N_b; j++)
 			aes->decipher_text[i + 4 * j] = state[aes->N_b * i + j];

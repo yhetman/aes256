@@ -41,7 +41,7 @@ typedef struct 	s_options
 	int 		stream_mode;
 }				t_options;
 
-typedef void	(*stream_modes)(uint8_t*, uint8_t*, uint8_t, FILE *);
+typedef void	(*stream_modes)(uint8_t*, uint8_t*, uint8_t);
 typedef void 	(*function)(t_aes *);
 
 /***			multiply.c 				***/
@@ -64,6 +64,7 @@ void			encrypt_block(t_aes *aes, uint8_t *state);
 
 /***			aes_decipher.c 	 		***/
 void 			decipher(t_aes *aes);
+void			decrypt_block(t_aes *aes, uint8_t *state);
 
 
 /***			print_uint8_t.c 		***/
@@ -72,25 +73,15 @@ void 			print_uint8_t(uint8_t *str);
 
 /***			initializer_for_stream_modes  ***/
 
-void
-init_t_aes(t_aes *aes, uint8_t *key, uint8_t *input);
+void			init_t_aes(t_aes *aes, uint8_t *key, uint8_t *input);
 
-void
-initializer_for_stream_modes(uint8_t *initial_key,
-	FILE *input, FILE *output, t_options *options);
-
-void
-ecb_encrypting(uint8_t *input, uint8_t*key, uint8_t input_legth, FILE * output);
+void			initializer_for_stream_modes(uint8_t *initial_key,
+				FILE *input, FILE *output, t_options *options);
 
 
-// stream_modes	derypting_functions[5] =
-// {
-// 	&ecb_decrypting,
-// 	&cbc_decrypting,
-// 	&cfb_decrypting,
-// 	&ofb_decrypting,
-// 	&ctr_decrypting
-// };
+/***			ecb 		  ***/
+void			ecb_encrypting(uint8_t *input, uint8_t*key, uint8_t input_legth);
+void			ecb_decrypting(uint8_t *input, uint8_t*key, uint8_t input_legth);
 
 
 #endif

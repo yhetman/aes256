@@ -23,15 +23,23 @@ stream_modes	encrypting_functions[1] =
 	// &ctr_encrypting
 };
 
+stream_modes	derypting_functions[1] =
+{
+	&ecb_decrypting,
+// 	&cbc_decrypting,
+// 	&cfb_decrypting,
+// 	&ofb_decrypting,
+// 	&ctr_decrypting
+};
 
 static void
 redirect_to_stream_mode(t_options *options, uint8_t *buffer, uint8_t *key,
-	uint8_t filesize, FILE *output)
+	uint8_t filesize)
 {
 	if (options->mode == true)
-		encrypting_functions[options->stream_mode - 1](buffer, key, filesize, output);
+		encrypting_functions[options->stream_mode - 1](buffer, key, filesize);
 	// else
-	// 	decrypting_functions[options->stream_mode - 1](buffer, key, filesize, output);
+	// 	decrypting_functions[options->stream_mode - 1](buffer, key, filesize);
 }
 
 void
@@ -55,6 +63,7 @@ initializer_for_stream_modes(uint8_t *initial_key,
 			buffer[i] = 32;
 	}
 	fread(buffer, 1, blocks, input);
-	redirect_to_stream_mode(options, buffer, initial_key, blocks + padding, output);
+	redirect_to_stream_mode(options, buffer, initial_key, blocks + padding);
+	fwrite(buffer, 1, blocks + padding, output);
 	free(buffer);
 }
